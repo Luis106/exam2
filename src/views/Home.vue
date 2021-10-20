@@ -1,5 +1,7 @@
 <template>
 <div class="container py-5">
+
+<p>Bienvendio {{getUser}} </p>
   <div class="wrapper">
     <div id="formContent">
       <!-- Login Form -->
@@ -153,7 +155,7 @@
        
         <input type="text"  id="Mtag" class="fadeIn first"  placeholder="Etiqueta" >
         <input type="text"  id="Mdescription" class="fadeIn second"  placeholder="Descripción">
-        <input type="button" v-on:click="modify()" class="fadeIn thirt" value = "Modificar"> 
+        <input type="button" id="Mbutt" v-on:click="modify()" class="fadeIn thirt" value = "Modificar"> 
     </div>
   </div>
 
@@ -194,19 +196,23 @@ name: "Home",
     return {
       newTask:"",
       showMod: true,
-      Mindex: 0,
-      Mstatus: ""
+      Mindex: null,
+      Mstatus: "",
+      User: ""
     }
   },
   computed:{
       ...mapGetters('tasks',[
           "getBacklogList",
           "getInProgressList",
-          "getCompletedList"
+          "getCompletedList",
+          "getUser"
       ])
     },
   methods: {
      async getAllTasks(){
+
+
        
         const BacklogTasks = this.$store.getters["tasks/getBacklogList"];
         const InProgressList = this.$store.getters["tasks/getInProgressList"];
@@ -248,6 +254,8 @@ name: "Home",
         //location.href = "#Mode";
         element.scrollIntoView( {behavior: 'smooth', block: "center"});
 
+        document.getElementById("Mbutt").disabled = false;
+
         document.getElementById("Mindex").innerHTML = taskIndex;
         document.getElementById("Mstatus").innerHTML = taskType;
 
@@ -269,25 +277,32 @@ name: "Home",
         }
       },
       async modify(){
-        
-        //console.log(document.getElementById("Mindex").innerHTML)
-        //console.log(document.getElementById("Mstatus").innerHTML)
+        if(this.Mindex !== null){
 
-        
-        const ind = this.Mindex;
-        const st = this.Mstatus;
+          
+          //console.log(document.getElementById("Mindex").innerHTML)
+          //console.log(document.getElementById("Mstatus").innerHTML)
+
+          
+          const ind = this.Mindex;
+          const st = this.Mstatus;
 
 
-        const ModTask = {
-          taskId: "",
-          description: document.getElementById("Mdescription").value,
-          status: document.getElementById("MTaskStatus").value ,
-          id:"",
-          tag: document.getElementById("Mtag").value 
-        };
-          //console.log(ModTask)
-          await this.$store.dispatch("tasks/changeTask", {taskIndex: ind, taskType: st, ModTask: ModTask});
-          location.reload();
+          const ModTask = {
+            taskId: "",
+            description: document.getElementById("Mdescription").value,
+            status: document.getElementById("MTaskStatus").value ,
+            id:"",
+            tag: document.getElementById("Mtag").value 
+          };
+            //console.log(ModTask)
+            await this.$store.dispatch("tasks/changeTask", {taskIndex: ind, taskType: st, ModTask: ModTask});
+             location.reload();
+             this.Mindex = null
+
+        }else{
+          alert("No se ha indicado la tarea a modificar")
+        }
       }
   },
   created() {

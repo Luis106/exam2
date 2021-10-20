@@ -6,13 +6,15 @@
 	const state = {
 		BacklogList: [],
 		InProgressList: [],
-		CompletedList: []
+		CompletedList: [],
+		User: ""
 	};
 	const getters = {
 
 		getBacklogList: (state) => state.BacklogList,
 		getInProgressList: (state) => state.InProgressList,
-		getCompletedList: (state) => state.CompletedList
+		getCompletedList: (state) => state.CompletedList,
+		getUser: (state) => state.User
 	};
 	const actions = {
 		async getAllTasks({commit}) {
@@ -26,6 +28,24 @@
 				if (response.data){
 					
 					commit('SET_TAKS', response.data);
+					
+				}
+
+			}catch (err) {
+				console.log(err);
+			}
+		},
+		async getUser({commit}) {
+			try {
+				const response = await axios.get(
+					`http://localhost:3000/Login?User`
+				);
+				
+				
+
+				if (response.data){
+					
+					commit('SET_User', response.data);
 					
 				}
 
@@ -139,6 +159,16 @@
 				
 					state.CompletedList.push(newTaskList[i]);
 				}
+			}
+			//console.log(state.BacklogList);
+
+		},
+		SET_User(user) {
+			
+			for(var i in user){
+				
+				state.User = user[i]
+				
 			}
 			//console.log(state.BacklogList);
 
