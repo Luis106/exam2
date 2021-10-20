@@ -1,5 +1,8 @@
 	import axios from "axios";
 
+	let met;
+	let taxttype2; 
+
 	const state = {
 		BacklogList: [],
 		InProgressList: [],
@@ -30,27 +33,39 @@
 				console.log(err);
 			}
 		},
-		async changeStatus({commit, state}, {taskIndex, taskType}) {
+		async changeTask({commit, state}, {taskIndex, taskType, ModTask}) {
+			//console.log("ModTask")
+			//console.log(ModTask)
+			console.log(taskType)
 			let currentTask;
-			if (taskType === "NEW") {
-				currentTask = state.createdTaskList[taskIndex]
-			} else {
-				currentTask = state.doneTaskList[taskIndex]
+			if (taskType === "Backlog") {
+				currentTask = state.BacklogList[taskIndex]
+			} else if (taskType === "InProgress") {
+				currentTask = state.InProgressList[taskIndex]
+			}else if (taskType === "Completed"){
+				currentTask = state.CompletedList[taskIndex]
 			}
-			const taskCopy = currentTask;
-			taskCopy['status'] = currentTask['status'] === "NEW"? "DONE": "NEW";
-
+		
+		
+			ModTask.id = currentTask.id
+			ModTask.taskId = currentTask.taskId
+			taxttype2 = taskType;
+			
+			
+			//console.log(currentTask)
+			//console.log(ModTask)
+			met = ModTask;
+			
 			const response = await axios.put(
 				`http://localhost:3000/tasks/${currentTask.id}`,
-				taskCopy
+				ModTask
 			)
-
-			if (response.status !== 500){
-				if (taskType === "NEW") {
-					commit("CHANGE_NEW_TASK_STATUS", taskIndex);
-				} else {
-					commit("CHANGE_DONE_TASK_STATUS", taskIndex);
-				}
+			
+			if (response.status != 500){
+				
+				commit("CHANGE_TASK_STATUS", taskIndex, taxttype2);
+				
+				
 			}
 		},
 		async addTask({commit}, task){
@@ -131,10 +146,66 @@
 		SET_DONE_TASKS(state, newTaskList) {
 			state.doneTaskList = newTaskList;
 		},
-		CHANGE_NEW_TASK_STATUS(state, taskIndex) {
-			state.createdTaskList[taskIndex]['status'] = "DONE";
-			state.doneTaskList.push(state.createdTaskList[taskIndex]);
-			state.createdTaskList.splice(taskIndex, 1);
+		CHANGE_TASK_STATUS(state, taskIndex,taskTYPE) {
+			console.log(taxttype2)
+			console.log(taskTYPE)
+			console.log(taskIndex)
+
+		
+
+			if(taxttype2 === met.status){
+				switch (taxttype2) {
+					case "Backlog":
+						console.log("En lista Backlog de primer switch")
+						state.BacklogList[taskIndex] = met;
+					break;
+					case "InProgress":
+						console.log("En lista InProgress de primer switch")
+						state.InProgressList[taskIndex] = met;
+					break;
+					
+					case "Completed":
+						console.log("En lista complete de primer switch")
+						console.log(met)
+						state.CompletedList[taskIndex] = met;
+						console.log("Final")
+					break;
+			}
+		}else{
+
+			switch (taxttype2) {
+				case "Backlog":
+					console.log("En lista Backlog de segundo switch")
+					state.BacklogList.splice(taskIndex, 1);
+				break;
+				case "InProgress":
+					console.log("En lista InProgress de segundo switch")
+					state.InProgressList.splice(taskIndex, 1);
+				break;
+				
+				case "Completed":
+					console.log("En lista Completed de segundo switch")
+					state.InProgressList.splice(taskIndex, 1);
+				break;
+		}
+
+		switch (met.status) {
+			case "Backlog":
+				console.log("En lista Backlog de tercer switch")
+				state.BacklogList.push(met)
+			break;
+			case "InProgress":
+				console.log("En lista InProgress de tercer switch")
+				state.InProgressList.push(met)
+			break;
+			
+			case "Completed":
+				console.log("En lista Completed de tercer switch")
+				state.CompletedList.push(met)
+			break;
+			}	
+		}
+		
 		},
 		CHANGE_DONE_TASK_STATUS(state, taskIndex) {
 			state.doneTaskList[taskIndex]['status'] = "NEW";

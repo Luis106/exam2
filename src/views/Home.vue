@@ -135,6 +135,28 @@
 
 
   </div>
+
+  
+
+<div class="wrapper"  id="Mode">
+    <div id="formContent" v-if="showMod" >
+
+      <label >Modificar la tarea: </label> <label id="Mindex"> </label> <label > de </label> <label id="Mstatus"> </label> <br>
+      <!-- Login Form -->
+       <label >Select list:</label>
+        <select class="form-control" id="MTaskStatus" aria-label=".form-select-lg example" >
+          <option value="Backlog">Backlog</option>
+          <option value="InProgress" selected>InProgress</option>
+          <option value="Completed">Completed</option>
+        </select>
+        
+       
+        <input type="text"  id="Mtag" class="fadeIn first"  placeholder="Etiqueta" >
+        <input type="text"  id="Mdescription" class="fadeIn second"  placeholder="Descripción">
+        <input type="button" v-on:click="modify()" class="fadeIn thirt" value = "Modificar"> 
+    </div>
+  </div>
+
 </div>
 
 
@@ -167,11 +189,13 @@ import taskComponent from '../components/taskComponent';
 
 export default {
 name: "Home",
+//el: "#Mode",
   data() {
     return {
       newTask:"",
-      showModal: false,
-
+      showMod: true,
+      Mindex: 0,
+      Mstatus: ""
     }
   },
   computed:{
@@ -215,8 +239,55 @@ name: "Home",
          console.log(taskIndex + " " + taskType)
          await this.$store.dispatch("tasks/deleteTask", {taskIndex: taskIndex, taskType: taskType})
       },
-      async changeStatus(taskIndex){
-         console.log(taskIndex)
+      changeStatus(taskIndex, taskType){
+        //location.href = "#";
+        console.log(taskIndex + " " + taskType)
+        this.showMod = true;
+        var element = document.getElementById("Mode");
+        //console.log(element)
+        //location.href = "#Mode";
+        element.scrollIntoView( {behavior: 'smooth', block: "center"});
+
+        document.getElementById("Mindex").innerHTML = taskIndex;
+        document.getElementById("Mstatus").innerHTML = taskType;
+
+        this.Mindex =taskIndex;
+        this.Mstatus = taskType;
+
+        if(taskType === "Backlog"){
+          document.getElementById("Mtag").value = this.getBacklogList[taskIndex].tag;
+          document.getElementById("Mdescription").value = this.getBacklogList[taskIndex].description;
+          document.getElementById("MTaskStatus").value = taskType;
+        }else if (taskType === "InProgress"){
+          document.getElementById("Mtag").value = this.getInProgressList[taskIndex].tag;
+          document.getElementById("Mdescription").value = this.getInProgressList[taskIndex].description;
+          document.getElementById("MTaskStatus").value = taskType; 
+        }else if (taskType === "Completed"){
+          document.getElementById("Mtag").value = this.getCompletedList[taskIndex].tag;
+          document.getElementById("Mdescription").value = this.getCompletedList[taskIndex].description;
+          document.getElementById("MTaskStatus").value = taskType;
+        }
+      },
+      async modify(){
+        
+        //console.log(document.getElementById("Mindex").innerHTML)
+        //console.log(document.getElementById("Mstatus").innerHTML)
+
+        
+        const ind = this.Mindex;
+        const st = this.Mstatus;
+
+
+        const ModTask = {
+          taskId: "",
+          description: document.getElementById("Mdescription").value,
+          status: document.getElementById("MTaskStatus").value ,
+          id:"",
+          tag: document.getElementById("Mtag").value 
+        };
+          //console.log(ModTask)
+          await this.$store.dispatch("tasks/changeTask", {taskIndex: ind, taskType: st, ModTask: ModTask});
+          location.reload();
       }
   },
   created() {

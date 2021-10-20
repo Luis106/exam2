@@ -34,7 +34,7 @@
   },
     methods: {
       ChangesRoute(){
-          this.currentView = "HOME";
+         // this.currentView = "HOME";
           this.$router.push({path: "/HOME"}); 
       },
       async MLogin(){

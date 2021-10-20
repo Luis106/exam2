@@ -4,7 +4,7 @@
             <span class="badge bg-primary text-white mb-2">{{tag}}</span>
             <p class="mb-0">{{description}}</p>
             <div>
-          <button type="button" v-on:click="emitChangeStatus(index)" class="btn btn-primary  btn-sm" >Modificar</button>
+          <button type="button" v-on:click="emitChangeStatus(index, status)" class="btn btn-primary  btn-sm" >Modificar</button>
           <button type="button" v-on:click="emitDelete(index, status )" class="btn btn-secondary  btn-sm">Eliminar</button>
         </div>
       </div>

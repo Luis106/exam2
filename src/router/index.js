@@ -10,11 +10,7 @@ const routes = [
     name: 'LOGIN',
     component: LOGIN
   },
-  {
-    path: '/Mod',
-    name: 'Mod',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Mod.vue')
-  },
+  
   {
     path: '/HOME',
     name: 'HOME',
