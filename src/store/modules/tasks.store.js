@@ -173,9 +173,6 @@
 			//console.log(state.BacklogList);
 
 		},
-		SET_DONE_TASKS(state, newTaskList) {
-			state.doneTaskList = newTaskList;
-		},
 		CHANGE_TASK_STATUS(state, taskIndex,taskTYPE) {
 			console.log(taxttype2)
 			console.log(taskTYPE)
@@ -236,11 +233,6 @@
 			}	
 		}
 		
-		},
-		CHANGE_DONE_TASK_STATUS(state, taskIndex) {
-			state.doneTaskList[taskIndex]['status'] = "NEW";
-			state.createdTaskList.push(state.doneTaskList[taskIndex]);
-			state.doneTaskList.splice(taskIndex, 1);
 		},
 		CREATE_TASK(state, task){
 			if(task.status === "Backlog"){

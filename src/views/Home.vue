@@ -1,11 +1,11 @@
 <template>
 <div class="container py-5">
+  <input type="button" v-on:click="ChangesRoute()" class="fadeIn thirt" value = "SALIR"> 
 
-<p>Bienvendio {{getUser}} </p>
   <div class="wrapper">
     <div id="formContent">
       <!-- Login Form -->
-       <label >Select list:</label>
+       <label >Seleccionar estado:</label>
         <select class="form-control" id="TaskStatus" aria-label=".form-select-lg example" >
           <option value="Backlog">Backlog</option>
           <option value="InProgress" selected>InProgress</option>
@@ -145,7 +145,7 @@
 
       <label >Modificar la tarea: </label> <label id="Mindex"> </label> <label > de </label> <label id="Mstatus"> </label> <br>
       <!-- Login Form -->
-       <label >Select list:</label>
+       <label >Seleccionar estado:</label>
         <select class="form-control" id="MTaskStatus" aria-label=".form-select-lg example" >
           <option value="Backlog">Backlog</option>
           <option value="InProgress" selected>InProgress</option>
@@ -210,6 +210,10 @@ name: "Home",
       ])
     },
   methods: {
+    ChangesRoute(){
+         // this.currentView = "HOME";
+          this.$router.push({path: "/"}); 
+      },
      async getAllTasks(){
 
 

@@ -5,8 +5,8 @@
 
     <!-- Login Form -->
 
-      <input type="text"  id="login" class="fadeIn second" name="login" placeholder="login">
-      <input type="text"  id="password" class="fadeIn third" name="login" placeholder="password">
+      <input type="text"  id="login" class="fadeIn second" name="login" placeholder="Login">
+      <input type="password"  id="password" class="fadeIn third" name="login" placeholder="Password">
       <input type="submit" v-on:click="MLogin" class="fadeIn fourth">
    
 
