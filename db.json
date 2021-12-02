@@ -3,5 +3,20 @@
     "User": "accept@test.com",
     "Password": "examen2doParcialB"
   },
-  "tasks": []
+  "tasks": [
+    {
+      "taskId": "U1636096001413",
+      "description": "1",
+      "status": "InProgress",
+      "id": "X1636096001413",
+      "tag": "1"
+    },
+    {
+      "taskId": "W1636096045851",
+      "description": "1",
+      "status": "InProgress",
+      "id": "G1636096045851",
+      "tag": "1"
+    }
+  ]
 }
